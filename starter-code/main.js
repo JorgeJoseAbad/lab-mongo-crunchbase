@@ -1,14 +1,16 @@
 
 /*jshint esversion: 6*/
-const MongoDB = require('mongodb');
-const mongoClient = MongoDB.MongoClient;
+//const MongoDB = require('mongodb'); //oficial driver for node mongoDB
+//const mongoClient = MongoDB.MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 const clear = require('clear');
-const readline = require('readline');
+const readline = require('readline'); //para leer en consola, es node nativo
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 const url = `mongodb://localhost:27017/ironhack`;
+//const url = `mongodb://localhost:27017/crunchbase`; no existe
 
 function printMenu(){
   console.log(`
@@ -35,7 +37,7 @@ function printMenu(){
   }
 
 
-mongoClient.connect(url, (error, db) => {
+MongoClient.connect(url, (error, db) => {
   if (error) {
     console.log('Error trying to connect to the Database');
     console.log(error);
@@ -43,7 +45,7 @@ mongoClient.connect(url, (error, db) => {
     console.log('Connection established correctly!! 😬');
 
     function mainMenu(){
-      clear();
+      clear(); //se ejecuta en consola
       printMenu();
       rl.question('Type an option: ', (option) => {
         switch(option){
@@ -208,6 +210,19 @@ mongoClient.connect(url, (error, db) => {
               console.log(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
+              console.log(docs);
+              docs.forEach((item)=>console.log(item.name));
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            }
+          });
+          break;
+
+          case "14":
+          db.collection('companies').find({"competitions.competitor.name":"Facebook"},{ name: 1,  _id: 0}).toArray((err,docs)=>{
+            if (err){
+              console.log(err);
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            } else {
               console.log(docs);
               docs.forEach((item)=>console.log(item.name));
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
