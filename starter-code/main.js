@@ -245,23 +245,38 @@ MongoClient.connect(url, (error, db) => {
           });
           break;
 
-          //How many companies that has "social-network"
-          //in tag-list and founded between 2002 and 2016 inclusive
           case "16":
           db.collection('companies').find({tag_list:{$in:["social-networking"]}, $and: [{"founded_year": {$gte: 2002}},
-                  {"founded_year": {$lte: 2016}}]},{name:1,_id:0}).toArray((err,docs)=>{
+                  {"founded_year": {$lte: 2016}}]},{name:1,_id:0}).count((err,count)=>{
+            if (err) {                                            //.toArray((err,docs))
+              console.log(err);
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            } else {
+              console.log(count);
+              //docs.forEach((item, i) => {
+              //  console.log(item.name);
+              //});
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            }
+          })
+          break;
+
+          case "17":
+          db.collection('companies').find({"offices.city":"London"},{name:1, offices:1, _id:0}).toArray((err,docs)=>{
             if (err) {
               console.log(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(docs);
-              docs.forEach((item, i) => {
-                console.log(item.name);
+              docs.forEach((company, i) => {
+                console.log("\nEmpresa: ",company.name," ;con oficinas en: ");
+                company.offices.forEach((office, i) => {
+                  console.log("Oficina nº",i+1,": ",office);
+                });
               });
-
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }
           })
-
           break;
 
           case "0":
