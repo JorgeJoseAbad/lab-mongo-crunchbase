@@ -245,6 +245,25 @@ MongoClient.connect(url, (error, db) => {
           });
           break;
 
+          //How many companies that has "social-network"
+          //in tag-list and founded between 2002 and 2016 inclusive
+          case "16":
+          db.collection('companies').find({tag_list:{$in:["social-networking"]}, $and: [{"founded_year": {$gte: 2002}},
+                  {"founded_year": {$lte: 2016}}]},{name:1,_id:0}).toArray((err,docs)=>{
+            if (err) {
+              console.log(err);
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            } else {
+              console.log(docs);
+              docs.forEach((item, i) => {
+                console.log(item.name);
+              });
+
+            }
+          })
+
+          break;
+
           case "0":
             console.log(`👋👋👋👋 😞 \n`);
             db.close((error) => { process.exit(0); });
