@@ -279,6 +279,22 @@ MongoClient.connect(url, (error, db) => {
           })
           break;
 
+          case "18":
+          db.collection('companies').find({tag_list:{$in:["social-networking"]}, $and: [{"founded_year": {$gte: 2002}},
+                  {"founded_year": {$lte: 2016}}], $and: [{"offices.city":"New York"}] },{name:1,_id:0}).count((err,count)=>{
+            if (err) {                                            //.toArray((err,docs))
+              console.log(err);
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            } else {
+              console.log(count);
+              //docs.forEach((item, i) => {
+              //  console.log(item.name);
+              //});
+              rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
+            }
+          })
+          break;
+
           case "0":
             console.log(`👋👋👋👋 😞 \n`);
             db.close((error) => { process.exit(0); });
