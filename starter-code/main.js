@@ -4,13 +4,12 @@
 //const mongoClient = MongoDB.MongoClient;
 const MongoClient = require('mongodb').MongoClient;
 const clear = require('clear');
-const readline = require('readline'); //para leer en consola, es node nativo
+const readline = require('readline'); //para leer en consola, es Node nativo
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 const url = `mongodb://localhost:27017/ironhack`;
-//const url = `mongodb://localhost:27017/crunchbase`; no existe
 
 function printMenu(){
   console.log(`
@@ -53,7 +52,7 @@ MongoClient.connect(url, (error, db) => {
           case "1":
             db.collection('companies').find({}, {name: 1, _id: 0}).toArray((error, result) => {
               if (error){
-                console.log(error);
+                console.error(error);
                 rl.question(`\nType enter to continue: `, (answer) => {mainMenu();});
               } else {
                 console.log(result);
@@ -65,7 +64,7 @@ MongoClient.connect(url, (error, db) => {
           case "2":
           db.collection('companies').count((error, count) => {
             if (error){
-              console.log(error);
+              console.error(error);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(count);
@@ -77,7 +76,7 @@ MongoClient.connect(url, (error, db) => {
           case "3":
           db.collection('companies').find({"founded_year":{$eq: 2004}}).count((error, count)=>{
             if (error){
-              console.log(error);
+              console.error(error);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(count);
@@ -89,7 +88,7 @@ MongoClient.connect(url, (error, db) => {
           case "4":
           db.collection('companies').find({"founded_year":2004,"founded_month" : 2},{ "name": 1, _id: 0}).toArray(function(err, docs){
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -102,7 +101,7 @@ MongoClient.connect(url, (error, db) => {
           db.collection('companies').find({"founded_year":2004,$and: [{"founded_month": {$gte: 4}},
                   {"founded_month": {$lte: 6}}]},{ "name": 1,  _id: 0}).sort({"founded_month" : 1}).toArray(function(err, docs){
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -114,7 +113,7 @@ MongoClient.connect(url, (error, db) => {
           case "6":
           db.collection('companies').find({"offices.city":"Barcelona"},{ "name": 1,  _id: 0}).toArray(function(err, docs){
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -126,7 +125,7 @@ MongoClient.connect(url, (error, db) => {
           case "7":
           db.collection('companies').find({"number_of_employees":{$gt:185000}},{ "name": 1, number_of_employees:1, _id: 0}).sort({"number_of_employees" : -1}).toArray(function(err, docs){
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -139,7 +138,7 @@ MongoClient.connect(url, (error, db) => {
           case "8":
           db.collection('companies').find({"name":"Facebook"},{ "name": 1, _id: 0}).toArray(function(err, docs){
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -151,7 +150,7 @@ MongoClient.connect(url, (error, db) => {
           case "9":
           db.collection('companies').find({"name":"Facebook"},{number_of_employees:1, _id: 0}).toArray(function(err, docs){
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -164,7 +163,7 @@ MongoClient.connect(url, (error, db) => {
           //db.collection('companies').find({"name":"Facebook"},{"products.name":1, _id: 0}).forEach(function(err, docs){
           db.collection('companies').find({name: "Facebook"}).toArray((err, docs) => {
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               //console.log(docs);
@@ -178,7 +177,7 @@ MongoClient.connect(url, (error, db) => {
           //db.collection('companies').find({$and:[{"name":"Facebook"},{"relationships.is_past":false}]},{"relationships":1, _id: 0}).forEach(function(err, docs){
           db.collection('companies').find({name: "Facebook"}).toArray((err, docs) => {
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               //console.log(docs);
@@ -193,7 +192,7 @@ MongoClient.connect(url, (error, db) => {
 
           db.collection('companies').find({name: "Facebook"}).toArray((err, docs) => {
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               //console.log(docs);
@@ -207,7 +206,7 @@ MongoClient.connect(url, (error, db) => {
           // 13.- List all the companies where "david-ebersman" has worked.
           db.collection('companies').find({"relationships.person.permalink": "david-ebersman"},{name: 1, _id: 0}).toArray((err, docs) => {
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             }else{
               console.log(docs);
@@ -220,7 +219,7 @@ MongoClient.connect(url, (error, db) => {
           case "14":
           db.collection('companies').find({"competitions.competitor.name":"Facebook"},{ name: 1,  _id: 0}).toArray((err,docs)=>{
             if (err){
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(docs);
@@ -233,7 +232,7 @@ MongoClient.connect(url, (error, db) => {
           case "15":
           db.collection('companies').find({tag_list:{$in:["social-networking"]}},{name:1,_id:0}).toArray((err,docs)=>{
             if (err) {
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(docs);
@@ -249,7 +248,7 @@ MongoClient.connect(url, (error, db) => {
           db.collection('companies').find({tag_list:{$in:["social-networking"]}, $and: [{"founded_year": {$gte: 2002}},
                   {"founded_year": {$lte: 2016}}]},{name:1,_id:0}).count((err,count)=>{
             if (err) {                                            //.toArray((err,docs))
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(count);
@@ -264,7 +263,7 @@ MongoClient.connect(url, (error, db) => {
           case "17":
           db.collection('companies').find({"offices.city":"London"},{name:1, offices:1, _id:0}).toArray((err,docs)=>{
             if (err) {
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(docs);
@@ -283,7 +282,7 @@ MongoClient.connect(url, (error, db) => {
           db.collection('companies').find({tag_list:{$in:["social-networking"]}, $and: [{"founded_year": {$gte: 2002}},
                   {"founded_year": {$lte: 2016}}], $and: [{"offices.city":"New York"}] },{name:1,_id:0}).count((err,count)=>{
             if (err) {                                            //.toArray((err,docs))
-              console.log(err);
+              console.error(err);
               rl.question(`\nType enter to continue: `,(answer)=>{mainMenu();});
             } else {
               console.log(count);
